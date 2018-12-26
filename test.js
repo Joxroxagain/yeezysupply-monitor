@@ -13,7 +13,7 @@ function addBots(number) {
 
 function addMonitors(number) {
   for (let i = 0; i < number; i++) {
-    monitors.push(new Monitor({pollMS: 10000}));
+    monitors.push(new Monitor({pollMS: Math.floor(Math.random() * 3000) + 2000}));
   }
 }
 
@@ -24,7 +24,6 @@ function startAll() {
 }
 
 addMonitors(1);
-addBots(1);
 startAll();
 
  

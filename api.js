@@ -3,6 +3,9 @@ const request = require('request');
 
 const cheerio = require('cheerio');
 
+
+
+
 let API = {};
 
 
@@ -11,16 +14,18 @@ API.fetchYS = function (userAgent, proxy, mode, callback) {
 	request({
 		method: 'get',
 		url: 'https://yeezysupply.com/',
-		proxy: proxy,
 		gzip: true,
 		followRedirect: true,
 		headers: {
 			'User-Agent': userAgent
 		}
 	}, (err, resp, body) => {
-
-		if (err) return callback(err, null);
-
+				
+		if (err || resp.statusCode != 200) {
+			console.log("Too many reqests")
+			return callback(err, null);
+		}
+		
 		let $ = cheerio.load(body, {xmlMode: true});
 		let data;
 

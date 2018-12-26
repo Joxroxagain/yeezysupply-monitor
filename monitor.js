@@ -54,19 +54,6 @@ class Task {
                         this.firstRun = false;
                         this.log('Initial Check Done @ ' + this.mode);
 
-                        if (this.mode == 'live') {
-                            for (let index = 0; index < data.variants.length; index++) {
-                                const size = data.variants[index].option1;
-                                const id = data.variants[index].id;
-                                const link = 'https://yeezysupply.com/cart/';
-                                const postData = '?previous_step=shipping_method&step=payment_method';
-                                const message = "Size " + size + " : " + link + id + ':1' + postData;
-                                // Discord.post(message)
-                                console.log(message);
-                            } 
-                            Notifier.emit('live', data);
-                        }
-
                     }
                 });
 
@@ -86,9 +73,15 @@ class Task {
                                 for (let index = 0; index < data.variants.length; index++) {
                                     const size = data.variants[index].option1;
                                     const id = data.variants[index].id;
-                                    Discord.post(size + " : " + `https://yeezysupply.com/cart/${id}:1?previous_step=shipping_method&step=payment_method`)
+                                    const link = 'https://yeezysupply.com/cart/';
+                                    const postData = '?previous_step=shipping_method&step=payment_method';
+                                    const message = "Size " + size + " : " + link + id + ':1' + postData;
+                                    Discord.toMonitor(message)
+                                    console.log(message);
                                 } 
                                 Notifier.emit('live', data);
+                            } else if (this.mode == 'pw') {
+                                Discord.toUpdate("Password page has been detected!")
                             }
                         }
 
