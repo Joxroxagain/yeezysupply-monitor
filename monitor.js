@@ -56,8 +56,13 @@ class Task {
 
                         if (this.mode == 'live') {
                             for (let index = 0; index < data.variants.length; index++) {
-                                // Discord.post(data.variants[index].option1 + " : " + data.variants[index].id)
-                                // console.log(data.variants[index].option1 + " : " + data.variants[index].id)
+                                const size = data.variants[index].option1;
+                                const id = data.variants[index].id;
+                                const link = 'https://yeezysupply.com/cart/';
+                                const postData = '?previous_step=shipping_method&step=payment_method';
+                                const message = "Size " + size + " : " + link + id + ':1' + postData;
+                                // Discord.post(message)
+                                console.log(message);
                             } 
                             Notifier.emit('live', data);
                         }
@@ -78,7 +83,11 @@ class Task {
                             this.log('Mode Changed: ' + this.mode);
 
                             if (this.mode == 'live') {
-
+                                for (let index = 0; index < data.variants.length; index++) {
+                                    const size = data.variants[index].option1;
+                                    const id = data.variants[index].id;
+                                    Discord.post(size + " : " + `https://yeezysupply.com/cart/${id}:1?previous_step=shipping_method&step=payment_method`)
+                                } 
                                 Notifier.emit('live', data);
                             }
                         }
