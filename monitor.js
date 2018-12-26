@@ -17,19 +17,14 @@ const api = require("./api.js");
 
 class Task {
 
-    constructor(monitorData, config) {
-        this.taskData = monitorData;
+    constructor(config) {
         this.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3107.4 Safari/537.36';
-        this.proxies = monitorData.proxies; /* Empty Array if there are none. */
-        this.keywords = monitorData.keywords;
-        this.url = monitorData.url;
+        this.proxies = config.proxies; /* Empty Array if there are none. */
         this.active = true;
         this.firstRun = true;
         this.intv = null;
         this.intervalCount = 0;
-        this.poll = 10000; //monitorData.pollMS;
-        this.sellerID = monitorData._id;
-        this.ysMode = null;
+        this.poll = config.pollMS;
     }
 
     async start() {
@@ -96,8 +91,7 @@ class Task {
 
         f();
 
-        
-        Notifier.on('live', () => {
+        Notifier.on('live', (data) => {
             this.log("LIVE PAGE DETECTED!")
             this.stop();
         }); 
@@ -111,33 +105,20 @@ class Task {
         clearInterval(this.intv);
     }
 
-    async restart() {
-        this.log('Restarting task after ban in 60 secondss...');
-        this.active = false;
-        global.needsRestart = false;
-        clearInterval(this.intv);
-        var that = this;
-        setTimeout(function () {
-            that.start();
-        }, 60000);
-    }
-
-
     log(msg, type) {
 
         var formatted = moment().format('MMMM Do YYYY h:mm:ss a')
 
         switch (type) {
             case 'error':
-                console.error(`[${this.url}]: ` + msg);
+                console.error(msg);
                 break;
             case 'info':
-                console.info(`[${this.url}]: ` + msg);
+                console.info(msg);
                 break;
             default:
-                console.log(`[${this.url}]: ` + msg);
+                console.log(msg);
         }
-        global.logs += `[${formatted}][${this.url}] ${msg}\n`
     }
 
 }

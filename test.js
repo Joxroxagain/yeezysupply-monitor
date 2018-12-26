@@ -1,4 +1,5 @@
 const Monitor = require("./monitor.js");
+const Bot = require("./bot.js");
 
 var bots = [];
 var monitors = [];
@@ -12,7 +13,7 @@ function addBots(number) {
 
 function addMonitors(number) {
   for (let i = 0; i < number; i++) {
-    monitors.push(new Monitor({interval: 1}));
+    monitors.push(new Monitor({pollMS: 10000}));
   }
 }
 

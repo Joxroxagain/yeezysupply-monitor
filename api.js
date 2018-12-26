@@ -1,4 +1,6 @@
 const request = require('request');
+const request = request.defaults({jar: true})
+
 const cheerio = require('cheerio');
 
 let API = {};
@@ -71,9 +73,8 @@ API.parseVariantsYS = function (body, callback) {
 	let parsedObjects = [];
 	$('script:not([src])').each((i, e) => {
 		s = e.children[0].data;
-		console.log(s)
 		if (s.startsWith('{"id":'))
-			parsedObjects.push(JSON.parse(s));
+			parsedObjects.push(tryParseJSON(s));
 	});
 
 	// let parsedObjects = [];
@@ -120,6 +121,26 @@ API.parseVariantsYS = function (body, callback) {
 	// }
 
 	return callback(null, parsedObjects);
+
+}
+
+API.cartItem = function (variant, callback) {
+	request({
+		method: 'get',
+		url: `https://yeezysupply.com/cart/${variant}:1`,
+		proxy: proxy,
+		gzip: true,
+		followRedirect: true,
+		headers: {
+			'User-Agent': userAgent
+		}
+	}, (err, resp, body) => {
+
+
+
+		return callback(null, console.log(resp));
+	})
+
 
 }
 
