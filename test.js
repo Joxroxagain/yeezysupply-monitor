@@ -18,14 +18,13 @@ function addMonitors(number) {
 }
 
 function startAll() {
-
   for (let i = 0; i < monitors.length; i++) {
     monitors[i].start();
   }
 }
 
 addMonitors(1);
-// addBots(1);
+addBots(1);
 startAll();
 
  

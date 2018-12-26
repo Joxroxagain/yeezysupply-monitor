@@ -3,7 +3,7 @@
 const Notifier = require('./notifier');
 // const mongoose = require('mongoose');
 // const fs = require('fs');
-
+const Discord = require("./discord.js");
 // const Seller = require('../models/Seller');
 // const Product = require('../models/Product');
 // const NewProduct = require('../models/NewProduct');
@@ -37,8 +37,6 @@ class Task {
             const randomProxy = null;
             /* YeezySupply tings */
 
-
-
             /*
 
                 upcoming - Single Product Page
@@ -57,6 +55,10 @@ class Task {
                         this.log('Initial Check Done @ ' + this.mode);
 
                         if (this.mode == 'live') {
+                            for (let index = 0; index < data.variants.length; index++) {
+                                // Discord.post(data.variants[index].option1 + " : " + data.variants[index].id)
+                                // console.log(data.variants[index].option1 + " : " + data.variants[index].id)
+                            } 
                             Notifier.emit('live', data);
                         }
 
@@ -76,6 +78,7 @@ class Task {
                             this.log('Mode Changed: ' + this.mode);
 
                             if (this.mode == 'live') {
+
                                 Notifier.emit('live', data);
                             }
                         }
@@ -92,7 +95,6 @@ class Task {
         f();
 
         Notifier.on('live', (data) => {
-            this.log("LIVE PAGE DETECTED!")
             this.stop();
         }); 
 

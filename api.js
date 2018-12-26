@@ -1,5 +1,5 @@
 const request = require('request');
-const request = request.defaults({jar: true})
+// const request = request.defaults({jar: true})
 
 const cheerio = require('cheerio');
 
@@ -120,11 +120,15 @@ API.parseVariantsYS = function (body, callback) {
 	// 	}
 	// }
 
-	return callback(null, parsedObjects);
+	//TODO: retunr multiple JSON items
+	return callback(null, parsedObjects[parsedObjects.length - 1].variants);
 
 }
 
 API.cartItem = function (variant, callback) {
+
+	
+
 	request({
 		method: 'get',
 		url: `https://yeezysupply.com/cart/${variant}:1`,
