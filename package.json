@@ -36,6 +36,7 @@
     "request-promise": "^4.2.2",
     "supreme-api": "^1.0.6",
     "tough-cookie": "^2.5.0",
-    "tough-cookie-filestore": "0.0.1"
+    "tough-cookie-filestore": "0.0.1",
+    "xml2js": "^0.4.19"
   }
 }
