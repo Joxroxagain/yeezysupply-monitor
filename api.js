@@ -19,7 +19,7 @@ API.fetchYS = function (userAgent, proxy, mode, callback) {
 
 		if (err) return callback(err, null);
 
-		let $ = cheerio.load(body);
+		let $ = cheerio.load(body, {xmlMode: true});
 		let data;
 
 		if (body.toLowerCase().indexOf('TOMORROW') > -1 || body.toLowerCase().indexOf('TODAY') > -1) {
@@ -67,52 +67,62 @@ API.parseVariantsYS = function (body, callback) {
 
 	let $ = cheerio.load(body);
 
+	//Load up all the JSON
 	let parsedObjects = [];
-	let fields = [];
+	$('script:not([src])').each((i, e) => {
+		s = e.children[0].data;
+		console.log(s)
+		if (s.startsWith('{"id":'))
+			parsedObjects.push(JSON.parse(s));
+	});
 
-	let arr = body.toString().split('variants.push(').map(x => x.replace(");", ""))
-	arr.shift();
+	// let parsedObjects = [];
+	// let fields = [];
 
-	let formatJSON = (object, fields) => {
+	// let arr = body.toString().split('variants.push(').map(x => x.replace(");", ""))
+	// arr.shift();
 
-		for (let i = 0; i < fields.length; i++) {
-			object = object.replace(fields[i], `"${fields[i]}"`);
-		}
+	// let formatJSON = (object, fields) => {
 
-		return JSON.parse(object);
+	// 	for (let i = 0; i < fields.length; i++) {
+	// 		object = object.replace(fields[i], `"${fields[i]}"`);
+	// 	}
 
-	}
+	// 	return JSON.parse(object);
 
-	let fetchFields = objectStr => {
-		objectStr.trim();
-		let newArr = objectStr.split(':').map(x => x.trim());
-		let list = [];
-		for (let i = 0; i < newArr.length; i++) {
-			if (i != (newArr.length - 1)) {
-				let fieldName = newArr[i].split('\n')[newArr[i].split('\n').length - 1].replace(/ /g, '');
-				list.push(fieldName)
-			}
-		}
-		return list;
-	}
+	// }
 
-	for (let i = 0; i < arr.length; i++) {
-		if (arr[i].indexOf('options') > -1) {
-			if (i == (arr.length - 1)) {
-				let obj = arr[i].split("}")[0] + "}";
-				let fields = fetchFields(obj);
-				parsedObjects.push(formatJSON(obj, fields));
-			} else {
-				let obj = arr[i];
-				let fields = fetchFields(obj);
-				parsedObjects.push(formatJSON(obj, fields));
-			}
-		}
-	}
+	// let fetchFields = objectStr => {
+	// 	objectStr.trim();
+	// 	let newArr = objectStr.split(':').map(x => x.trim());
+	// 	let list = [];
+	// 	for (let i = 0; i < newArr.length; i++) {
+	// 		if (i != (newArr.length - 1)) {
+	// 			let fieldName = newArr[i].split('\n')[newArr[i].split('\n').length - 1].replace(/ /g, '');
+	// 			list.push(fieldName)
+	// 		}
+	// 	}
+	// 	return list;
+	// }
+
+	// for (let i = 0; i < arr.length; i++) {
+	// 	if (arr[i].indexOf('options') > -1) {
+	// 		if (i == (arr.length - 1)) {
+	// 			let obj = arr[i].split("}")[0] + "}";
+	// 			let fields = fetchFields(obj);
+	// 			parsedObjects.push(formatJSON(obj, fields));
+	// 		} else {
+	// 			let obj = arr[i];
+	// 			let fields = fetchFields(obj);
+	// 			parsedObjects.push(formatJSON(obj, fields));
+	// 		}
+	// 	}
+	// }
 
 	return callback(null, parsedObjects);
 
 }
+
 
 function tryParseJSON(jsonString) {
 	try {
@@ -120,7 +130,7 @@ function tryParseJSON(jsonString) {
 		if (o && typeof o === "object") {
 			return o;
 		}
-	} catch (e) {}
+	} catch (e) { }
 	return false;
 }
 
