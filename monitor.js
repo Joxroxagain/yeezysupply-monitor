@@ -54,7 +54,17 @@ class Task {
                         this.firstRun = false;
                         this.log('Initial Check Done @ ' + this.mode);
 
+                        if (this.mode == 'live') {
+                            console.log(data.variants)
+                            Discord.toTesting(data.variants);
+                            Notifier.emit('live');
+                        } else if (this.mode == 'pw') {
+                            Discord.toUpdate("Password page has been detected!")
+                        }
+
                     }
+
+
                 });
 
 
@@ -62,30 +72,26 @@ class Task {
 
                 api.fetchYS(this.userAgent, randomProxy, this.mode, (err, data) => {
 
-                    if (!err) {
+                    if (!err && data.mode != null) {
 
                         if (this.mode != data.mode) {
                             
                             this.mode = data.mode;
+
                             this.log('Mode Changed: ' + this.mode);
 
                             if (this.mode == 'live') {
-                                for (let index = 0; index < data.variants.length; index++) {
-                                    const size = data.variants[index].option1;
-                                    const id = data.variants[index].id;
-                                    const link = 'https://yeezysupply.com/cart/';
-                                    const postData = '?previous_step=shipping_method&step=payment_method';
-                                    const message = "Size " + size + " : " + link + id + ':1' + postData;
-                                    Discord.toMonitor(message)
-                                    console.log(message);
-                                } 
-                                Notifier.emit('live', data);
+                                Discord.toTesting(data.variants);
+                                Notifier.emit('live');
                             } else if (this.mode == 'pw') {
                                 Discord.toUpdate("Password page has been detected!")
                             }
                         }
 
+                    } else {
+                        this.log("No response from the server", "error");
                     }
+
                 });
 
             }

@@ -22,8 +22,7 @@ API.fetchYS = function (userAgent, proxy, mode, callback) {
 	}, (err, resp, body) => {
 				
 		if (err || resp.statusCode != 200) {
-			console.log("Too many reqests")
-			return callback(err, null);
+			return callback("Too many reqests", null);
 		}
 		
 		let $ = cheerio.load(body, {xmlMode: true});
@@ -31,7 +30,6 @@ API.fetchYS = function (userAgent, proxy, mode, callback) {
 
 		if (body.toLowerCase().indexOf('TOMORROW') > -1 || body.toLowerCase().indexOf('TODAY') > -1) {
 			data = {
-				pageURL: resp.request.uri.href,
 				img: 'http://' + $('img[class="MP__scrollable_img js-scrollable-img"]').attr('src'),
 				title: (mode == null) ? "Monitor Started @ Upcoming Page" : `Upcoming Page Live for "${$('div[itemprop="name"]').text()}"!`,
 				mode: 'upcoming',
@@ -44,7 +42,6 @@ API.fetchYS = function (userAgent, proxy, mode, callback) {
 
 			API.parseVariantsYS(body.toLowerCase(), (err, variants) => {
 				data = {
-					pageURL: resp.request.uri.href,
 					img: 'http://' + $('img[class="MP__scrollable_img js-scrollable-img"]').attr('src'),
 					title: (mode == null) ? "Monitor Started @ Cart Page" : `Page Live for "${$('div[itemprop="name"]').text()}"!`,
 					mode: 'live',
@@ -57,7 +54,6 @@ API.fetchYS = function (userAgent, proxy, mode, callback) {
 
 		if (resp.request.uri.path == '/password') {
 			data = {
-				pageURL: resp.request.uri.href,
 				img: null,
 				title: (mode == null) ? 'Monior Started @ Password Page' : 'Password Page Live',
 				mode: 'pw',
@@ -82,6 +78,7 @@ API.parseVariantsYS = function (body, callback) {
 			parsedObjects.push(tryParseJSON(s));
 	});
 
+	console.log()
 	// let parsedObjects = [];
 	// let fields = [];
 
@@ -125,8 +122,8 @@ API.parseVariantsYS = function (body, callback) {
 	// 	}
 	// }
 
-	//TODO: retunr multiple JSON items
-	return callback(null, parsedObjects[parsedObjects.length - 1].variants);
+	//TODO: return multiple JSON items
+	return callback(null, parsedObjects[0].variants);
 
 }
 
