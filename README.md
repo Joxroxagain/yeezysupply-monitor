@@ -1,2 +1,2 @@
 # Yeezy Supply monitor
-The start of a yeezy supply monitor! More to come...
+The start of a yeezy supply monitor
