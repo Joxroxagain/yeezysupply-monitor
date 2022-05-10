@@ -5,9 +5,9 @@ const Discord = require('discord.js');
 
 // Create an instance of a Discord client
 const client = new Client();
-const monitor = new Discord.WebhookClient('527482856453439488', 'G81AnS_RRufL3xp9eaIACZ4d0l7ru7uFNlliEBe_s0Zr3NpV-1wUpLTNY2Qkx_t1LbLB');
-const update = new Discord.WebhookClient('527476533208809479', 'dfACkGh-1g8homiAMcSttN-wpk5GkjdQ7oIl4RXL1TE41K2Y_MyBv8tc1JZI8cOPt-DV');
-const test = new Discord.WebhookClient('527470904205377538', 'hl6ztklhJFlAaGacjb9dYADFdqLA9EK0NpIfGpDW_qQ7-Nn53u3rFUgxQXvQvEdAol_m');
+const monitor = new Discord.WebhookClient('', '');
+const update = new Discord.WebhookClient('', '');
+const test = new Discord.WebhookClient('', '');
 
 let API = {};
 
